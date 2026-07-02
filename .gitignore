@@ -1,0 +1,22 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets / environment
+.env
+
+# ADK runtime state (session databases, etc.)
+.adk/
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# macOS
+.DS_Store
+
+# Internal working notes (not part of the public project)
+WORK_LOG.md
+DOCS_TODO.md

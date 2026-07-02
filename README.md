@@ -108,13 +108,20 @@ The system enforces privacy at every boundary:
 
 ## Setup Instructions
 
-### 1. Prerequisites
+### 1. Clone the Project
+
+```bash
+git clone https://github.com/CSH-1220/digital-safety-guardian.git
+cd digital-safety-guardian
+```
+
+### 2. Prerequisites
 
 - Python 3.12+ (see `pyproject.toml` for `requires-python = ">=3.12,<3.14"`)
 - `uv` package manager ([install here](https://docs.astral.sh/uv/))
 - A Gemini API key from Google Cloud Console
 
-### 2. Install Dependencies
+### 3. Install Dependencies
 
 ```bash
 uv sync
@@ -127,7 +134,7 @@ This installs all dependencies from `pyproject.toml`, including:
 - `pydantic>=2.0.0` — schema validation
 - `pytest>=8.0.0` (dev) — testing
 
-### 3. Configure Environment
+### 4. Configure Environment
 
 Copy `.env.example` to `.env` and add your Gemini API key:
 
@@ -138,13 +145,13 @@ cp .env.example .env
 
 The workflow reads `GEMINI_API_KEY` and `GEMINI_MODEL` (defaults to `gemini-2.5-flash`) from the environment.
 
-### 4. Verify Installation
+### 5. Verify Installation
 
 ```bash
 uv run python -c "import google.adk, pydantic, httpx, mcp; print('ok')"
 ```
 
-### 5. Run the Interactive Playground
+### 6. Run the Interactive Playground
 
 The ADK playground is the main UI. Start it with:
 
@@ -165,30 +172,33 @@ Either command starts an interactive session where you can:
 - Paste structured JSON risk events (see examples below)
 - See the Guardian's assessment and advice in real time
 
-### 6. Example Payloads for the Playground
+### 7. Example Payloads for the Playground
 
-**Free-text example:**
-```
-I got a link to phishy-demo.test from a friend saying "urgent login needed — verify now". Should I click it?
-```
+Paste any of these into the playground chat. **These are the exact use cases shown in the slides and the demo video**, so you can reproduce them end-to-end.
 
-**Structured JSON example:**
+**Use Case 1 — Signup:**
 ```json
 {
-  "url": "https://phishy-demo.test/login",
-  "raw_context": "friend sent urgent message"
+  "app_or_domain": "phishy-demo.test",
+  "email": "leaked@example.com",
+  "url": "https://phishy-demo.test/signup",
+  "raw_context": "User is attempting to create a new account on a signup page."
 }
 ```
 
-**Another example (app permissions):**
+**Use Case 2 — Phishing link click:**
 ```json
 {
-  "app_or_domain": "flashlight-helper.example",
-  "raw_context": "app is asking to disable two-factor authentication and access my contacts"
+  "app_or_domain": "account-verify-demo.test",
+  "email": null,
+  "url": "http://account-verify-demo.test/login/verify",
+  "raw_context": "Link click event from a message app. Only the destination URL was shared with the guardian."
 }
 ```
 
-### 7. Run the Self-Built MCP Server
+You can also just describe the situation in plain language (e.g. *"I got a link to phishy-demo.test saying 'urgent login needed — verify now', should I click it?"*) — the intake node accepts free text, structured JSON, or a genai chat message.
+
+### 8. Run the Self-Built MCP Server
 
 To expose all six checks as standard MCP tools:
 
@@ -204,7 +214,7 @@ The server runs on stdin/stdout (Claude can connect to it directly). It exposes 
 - `check_app_reputation_tool(app_or_domain: str | None) -> AppReputationCheck`
 - `check_password_hygiene_tool() -> PasswordHygieneCheck`
 
-### 8. Run Tests
+### 9. Run Tests
 
 ```bash
 uv run pytest -q

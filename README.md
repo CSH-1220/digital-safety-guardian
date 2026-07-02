@@ -29,6 +29,9 @@ All six safety checks are also published as standard MCP tools via a self-built 
 
 ### Project Structure
 
+<details>
+<summary><b>File-by-file layout</b></summary>
+
 ```
 guardian/
 ├── workflow.py              # ADK graph wiring (build_app, build_offline_app)
@@ -60,11 +63,16 @@ pyproject.toml               # Project metadata & dependencies
 README.md                    # This file
 ```
 
+</details>
+
 ### Graph Overview
 
 ![Guardian workflow graph](docs/graph.png)
 
-The production workflow is a single ADK graph called `guardian` with 9 nodes:
+The production workflow is a single ADK graph called `guardian` with 9 nodes.
+
+<details>
+<summary><b>What each of the 9 nodes does</b></summary>
 
 - **intake** — normalizes incoming input into a `RiskEvent`
 - **assess_risk** — LLM node that triages the risk and selects relevant checks (open-ended, no fixed taxonomy)
@@ -76,10 +84,17 @@ The production workflow is a single ADK graph called `guardian` with 9 nodes:
 - **finalize_advice** — reconciles the advisor's priority_order to the checks that actually ran, returns final `GuardianAdvice`
 - **handle_unrelated** — deterministic branch for "no_concern" cases (no checks run)
 
+</details>
+
 > 📖 **Deep dive:** [`docs/architecture.md`](docs/architecture.md) covers the node-by-node specifications, the data-flow walkthrough, the LLM prompts, the full data contracts (`RiskEvent` → `RiskAssessment` → `RiskFinding` → `GuardianAdvice`), the privacy & security model, how to add a new check, and the production roadmap.
 
 
 ### The Three Demonstrated Concepts
+
+**1. Open-ended LLM triage · 2. Self-built MCP server · 3. Privacy by design.**
+
+<details>
+<summary><b>Details on each concept</b></summary>
 
 #### 1. Multi-Node ADK Graph with Open-Ended LLM Triage
 The workflow uses two LLM nodes (`assess_risk` and `advisor`), both schema-constrained with Pydantic:
@@ -105,6 +120,8 @@ The system enforces privacy at every boundary:
 - **Password check** (`guardian/tools/password_hygiene.py`) has a function signature that takes **no input**—it cannot receive a password, by design.
 - All demo data is **synthetic only**: breach database is in-memory, threat list is a local file, reputation data is hardcoded.
 - **No network access to credentials**: domain reputation uses keyless RDAP; no API keys are passed to checks.
+
+</details>
 
 ## Setup Instructions
 

@@ -67,7 +67,7 @@ README.md                    # This file
 
 ### Graph Overview
 
-![Guardian workflow graph](docs/graph.png)
+<p align="center"><img src="docs/graph.png" alt="Guardian workflow graph" width="460"></p>
 
 The production workflow is a single ADK graph called `guardian` with 9 nodes.
 

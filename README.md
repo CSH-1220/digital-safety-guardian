@@ -29,8 +29,6 @@ All six safety checks are also published as standard MCP tools via a self-built 
 
 ### Project Structure
 
-<details>
-<summary><b>File-by-file layout</b></summary>
 
 ```
 guardian/
@@ -63,7 +61,6 @@ pyproject.toml               # Project metadata & dependencies
 README.md                    # This file
 ```
 
-</details>
 
 ### Graph Overview
 
